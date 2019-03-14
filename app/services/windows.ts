@@ -252,7 +252,7 @@ export class WindowsService extends StatefulService<IWindowsState> {
     this.updateChildWindowOptions(options);
   }
 
-  getCurrentDisplay() {
+  getMainWindowDisplay() {
     const window = this.windows.main;
     const bounds = window.getBounds();
     return electron.screen.getDisplayMatching(bounds);
