@@ -64,9 +64,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
   onWindowsReadySubscription: Subscription;
   lifecycle: LoginLifecycle;
 
-  async init() {
-    super.init();
-
+  async initialize() {
     if (!this.state.isEnabled) {
       return;
     }
@@ -75,11 +73,6 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
       init: this.createOverlay,
       destroy: this.destroyOverlay,
       context: this,
-    });
-
-    // TODO: better way to track shutdown
-    electron.ipcRenderer.once('shutdownComplete', () => {
-      overlay.stop();
     });
   }
 
@@ -245,14 +238,16 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
     this.state.isEnabled = shouldEnable;
   }
 
-  async destroyed() {
+  async destroy() {
     await this.lifecycle.destroy();
   }
 
   async destroyOverlay() {
-    overlay.stop();
-    this.onWindowsReadySubscription.unsubscribe();
-    Object.values(this.windows).forEach(win => win.destroy());
+    if (this.state.isEnabled) {
+      overlay.stop();
+      this.onWindowsReadySubscription.unsubscribe();
+      Object.values(this.windows).forEach(win => win.destroy());
+    }
   }
 
   private createWindowOverlays() {
