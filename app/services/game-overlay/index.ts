@@ -109,6 +109,7 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
       thickFrame: false,
       webPreferences: {
         nodeIntegration: false,
+        contextIsolation: true,
       },
     };
 
