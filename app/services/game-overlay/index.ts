@@ -120,13 +120,6 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
       y: containerY,
     });
 
-    const commonBrowserViewOptions = {
-      webPreferences: {
-        nodeIntegration: false,
-        contextIsolation: true,
-      },
-    };
-
     this.windows.recentEvents = new BrowserWindow({
       ...commonWindowOptions,
       width: 600,
