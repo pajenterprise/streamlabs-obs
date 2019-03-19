@@ -11,7 +11,7 @@ import { WindowsService } from '../windows';
 import { PersistentStatefulService } from '../persistent-stateful-service';
 import { mutation } from '../stateful-service';
 
-const { BrowserWindow, BrowserView } = electron.remote;
+const { BrowserWindow } = electron.remote;
 
 export type GameOverlayState = {
   isEnabled: boolean;
