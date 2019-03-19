@@ -184,16 +184,9 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
       'overlay',
     );
 
-    // Listen for the second dom-ready as we trigger a reload as a workaround for a blank screen
-    fromEvent(this.windows.overlayControls.webContents, 'dom-ready')
-      .pipe(take(2))
-      .subscribe({
-        complete: () => this.onWindowsReady.next(this.windows.overlayControls),
-      });
-
     this.windows.overlayControls.webContents.once('dom-ready', async () => {
-      this.windows.overlayControls.reload();
       await this.windows.overlayControls.webContents.executeJavaScript(makeDraggable);
+      this.onWindowsReady.next(this.windows.overlayControls);
     });
   }
 
