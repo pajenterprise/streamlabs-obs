@@ -154,12 +154,6 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
 
     this.windows.chat.setBounds({ x: containerX, y: containerY, width: 300, height: 600 });
 
-    for (const view of [this.windows.recentEvents, this.windows.chat]) {
-      view.webContents.once('dom-ready', async () => {
-        await view.webContents.executeJavaScript(makeDraggable);
-      });
-    }
-
     this.windows.recentEvents.loadURL(this.userService.recentEventsUrl());
     this.windows.chat.loadURL(
       await getPlatformService(this.userService.platform.type).getChatUrl(
@@ -185,9 +179,14 @@ export class GameOverlayService extends PersistentStatefulService<GameOverlaySta
     );
 
     this.windows.overlayControls.webContents.once('dom-ready', async () => {
-      await this.windows.overlayControls.webContents.executeJavaScript(makeDraggable);
       this.onWindowsReady.next(this.windows.overlayControls);
     });
+
+    for (const view of Object.values(this.windows)) {
+      view.webContents.once('dom-ready', async () => {
+        await view.webContents.executeJavaScript(makeDraggable);
+      });
+    }
   }
 
   showOverlay() {
